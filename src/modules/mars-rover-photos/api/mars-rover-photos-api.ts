@@ -5,6 +5,6 @@ const api = axios.create({ baseURL: '/api/photos' });
 
 export class MarsRoverPhotosApi {
   static getAllRoverPhotos(params: Photos_Index_GetQuery) {
-    return api.get<Photos_Index_GetData>('', { params });
+    return api.get<Photos_Index_GetData>('/', { params });
   }
 }

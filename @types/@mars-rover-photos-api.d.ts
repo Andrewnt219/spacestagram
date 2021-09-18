@@ -31,10 +31,10 @@ declare module '@mars-rover-photos-api' {
   };
 
   type MarsRoverPhoto = {
-    id: string;
+    id: number;
     sol: number;
     camera: {
-      id: string;
+      id: number;
       name: string;
       rover_id: number;
       full_name: string;
@@ -42,7 +42,7 @@ declare module '@mars-rover-photos-api' {
     img_src: string;
     earth_date: string;
     rover: {
-      id: string;
+      id: number;
       name: string;
       landing_date: string;
       launch_date: string;
@@ -51,6 +51,6 @@ declare module '@mars-rover-photos-api' {
   };
 
   type MarsRoverPhotosResponse = {
-    photos: Photo[];
+    photos: MarsRoverPhoto[];
   };
 }

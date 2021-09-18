@@ -1,6 +1,6 @@
 declare module '@mars-rover-api' {
   type Rover = {
-    id: string;
+    id: number;
     name: string;
     landing_date: string;
     launch_date: string;
@@ -9,9 +9,9 @@ declare module '@mars-rover-api' {
     max_date: string;
     total_photos: number;
     camera: {
-      id: string;
+      id: number;
       name: string;
-      rover_id: string;
+      rover_id: number;
       full_name: string;
     }[];
   };
