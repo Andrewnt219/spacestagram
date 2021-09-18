@@ -21,4 +21,6 @@ declare module '@common' {
   type ApiQuery = Record<string, number | string | string[]>;
 
   type ApiError = AxiosError<TResultError>;
+
+  type ValidateQuery<T extends ApiQuery> = (query: ApiQuery) => TResult<T>;
 }

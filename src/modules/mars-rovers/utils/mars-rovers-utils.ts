@@ -1,5 +1,4 @@
 import { MarsRoverQuery } from '@mars-rover-api';
-import { hasValue } from '@utils/validate-utils';
 import queryString from 'query-string';
 
 export function buildMarsRoverUrl({ rover_id }: MarsRoverQuery) {
@@ -18,10 +17,4 @@ export function buildMarsRoversUrl() {
       api_key: process.env['NASA_API_KEY'],
     },
   });
-}
-
-export function isMarsRoverQuery(
-  query: Record<string, number | string | string[]>
-): query is MarsRoverQuery {
-  return hasValue(query.rover_id);
 }

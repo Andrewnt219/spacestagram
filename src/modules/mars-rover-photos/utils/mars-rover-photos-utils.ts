@@ -1,5 +1,4 @@
 import { MarsRoverPhotosQuery } from '@mars-rover-photos-api';
-import { hasValue } from '@utils/validate-utils';
 import queryString from 'query-string';
 export function buildMarsRoverPhotosUrl({
   rover_id,
@@ -12,10 +11,4 @@ export function buildMarsRoverPhotosUrl({
       api_key: process.env['NASA_API_KEY'],
     },
   });
-}
-
-export function isMarsRoverPhotosQuery(
-  query: Record<string, number | string | string[]>
-): query is MarsRoverPhotosQuery {
-  return hasValue(query.rover_id);
 }

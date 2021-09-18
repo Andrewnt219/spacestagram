@@ -1,4 +1,4 @@
-import { ApiQuery, TResult, TResultSuccess } from '@common';
+import { TResult, TResultSuccess, ValidateQuery } from '@common';
 import { PhotoLike } from '@modules/photo-likes';
 import { PhotoLikesService } from '@modules/photo-likes/server-index';
 import { ResultError, ResultNotFound, ResultSuccess } from '@utils/api-utils';
@@ -7,7 +7,10 @@ import { NextApiHandler } from 'next';
 
 type PatchData = PhotoLike;
 export type Photo_IncraseLike_PatchData = TResultSuccess<PatchData>;
-export type Photo_IncraseLike_PatchQuery = { photo_id: string };
+export type Photo_IncraseLike_PatchQuery = Pick<
+  PhotoLike,
+  'photo_id' | 'user_id'
+>;
 
 const patch: NextApiHandler<TResult<PatchData>> = async (req, res) => {
   const query = validateQuery(req.query);
@@ -24,12 +27,18 @@ const patch: NextApiHandler<TResult<PatchData>> = async (req, res) => {
   return res.status(200).json(ResultSuccess(updatedPhotoLike));
 };
 
-function validateQuery(query: ApiQuery): TResult<Photo_IncraseLike_PatchQuery> {
-  if (typeof query.photo_id !== 'string') {
-    return ResultError('Missing phot_id');
+const validateQuery: ValidateQuery<Photo_IncraseLike_PatchQuery> = (query) => {
+  const castedQuery = query as Photo_IncraseLike_PatchQuery;
+
+  if (typeof castedQuery.photo_id !== 'string') {
+    return ResultError('Missing photo_id');
   }
 
-  return ResultSuccess(query as Photo_IncraseLike_PatchQuery);
-}
+  if (typeof castedQuery.user_id !== 'string') {
+    return ResultError('Missing user_id');
+  }
+
+  return ResultSuccess(castedQuery);
+};
 
 export default withApiHandler({ patch });
