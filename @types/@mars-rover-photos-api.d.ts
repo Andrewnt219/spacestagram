@@ -23,10 +23,34 @@ declare module '@mars-rover-photos-api' {
 
   type RoverCamera = CuriosityCamera | OpportunityCamera | SpiritCamera;
 
-  type Query = {
+  type MarsRoverPhotosQuery = {
     sol?: number;
     camera?: RoverCamera['abbreviation'];
     page?: number;
-    api_key: string;
+    rover_id: RoverCamera['rover_id'];
+  };
+
+  type MarsRoverPhoto = {
+    id: string;
+    sol: number;
+    camera: {
+      id: string;
+      name: string;
+      rover_id: number;
+      full_name: string;
+    };
+    img_src: string;
+    earth_date: string;
+    rover: {
+      id: string;
+      name: string;
+      landing_date: string;
+      launch_date: string;
+      status: 'active' | 'deactive';
+    };
+  };
+
+  type MarsRoverPhotosResponse = {
+    photos: Photo[];
   };
 }

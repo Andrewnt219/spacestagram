@@ -46,9 +46,9 @@ export function getAxiosError(error: AxiosError<TResultError>): string {
 export function getErrorMessage(error: unknown): string {
   if (typeof error === 'string') return error;
 
-  if (hasMessage(error)) return error.message;
-
   if (axios.isAxiosError(error)) return getAxiosError(error);
+
+  if (hasMessage(error)) return error.message;
 
   return 'Something went wrong';
 }
