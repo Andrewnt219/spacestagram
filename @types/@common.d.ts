@@ -18,5 +18,7 @@ declare module '@common' {
 
   type TResult<Data = unknown> = TResultSuccess<Data> | TResultError;
 
+  type ApiQuery = Record<string, number | string | string[]>;
+
   type ApiError = AxiosError<TResultError>;
 }
