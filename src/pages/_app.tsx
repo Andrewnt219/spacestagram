@@ -1,3 +1,4 @@
+import { UserAuthProvier } from '@modules/user-auth';
 import { AppProvider } from '@shopify/polaris';
 import '@shopify/polaris/dist/styles.css';
 import enTranslations from '@shopify/polaris/locales/en.json';
@@ -9,7 +10,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider i18n={enTranslations}>
-        <Component {...pageProps} />
+        <UserAuthProvier>
+          <Component {...pageProps} />
+        </UserAuthProvier>
       </AppProvider>
     </QueryClientProvider>
   );
