@@ -1,6 +1,7 @@
 export type PhotoLike = {
+  _id: string;
   count: number;
   photo_id: string;
   user_id: string;
-  timestamp: string;
+  _timestamp: string;
 };
