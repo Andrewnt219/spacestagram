@@ -2,7 +2,7 @@ import { TResult, TResultSuccess, ValidateQuery } from '@common';
 import { PhotoLike } from '@modules/photo-likes';
 import { PhotoLikesService } from '@modules/photo-likes/server-index';
 import { initPhotoLike } from '@modules/photo-likes/utils';
-import { ResultError, ResultNotFound, ResultSuccess } from '@utils/api-utils';
+import { ResultError, ResultSuccess } from '@utils/api-utils';
 import { withApiHandler } from '@utils/with-api-handler';
 import { NextApiHandler } from 'next';
 
@@ -13,25 +13,19 @@ export type Photo_IncraseLike_PatchQuery = Pick<
   'photo_id' | 'user_id'
 >;
 
-const patch: NextApiHandler<TResult<PatchData>> = async (req, res) => {
+const get: NextApiHandler<TResult<PatchData>> = async (req, res) => {
   const query = validateQuery(req.query);
   if (query.type === 'error') return res.status(400).json(query);
 
   const photoLike = await PhotoLikesService.get(query.data);
-  if (!photoLike) {
-    const newPhotoLike = initPhotoLike(query.data);
-    await PhotoLikesService.create(newPhotoLike);
-    return res.status(201).json(ResultSuccess(newPhotoLike));
+  if (photoLike) {
+    await PhotoLikesService.delete(photoLike._id);
+    return res.status(200).json(ResultSuccess(photoLike));
   }
 
-  await PhotoLikesService.increaseLike(photoLike._id);
-
-  const updatedPhotoLike = await PhotoLikesService.get(query.data);
-  if (!updatedPhotoLike) {
-    return res.status(404).json(ResultNotFound());
-  }
-
-  return res.status(200).json(ResultSuccess(updatedPhotoLike));
+  const newPhotoLike = initPhotoLike(query.data);
+  await PhotoLikesService.create(newPhotoLike);
+  return res.status(201).json(ResultSuccess(newPhotoLike));
 };
 
 const validateQuery: ValidateQuery<Photo_IncraseLike_PatchQuery> = (query) => {
@@ -48,4 +42,4 @@ const validateQuery: ValidateQuery<Photo_IncraseLike_PatchQuery> = (query) => {
   return ResultSuccess(castedQuery);
 };
 
-export default withApiHandler({ patch });
+export default withApiHandler({ get });

@@ -7,7 +7,6 @@ export function initPhotoLike(
   return {
     ...data,
     _id: nanoid(16),
-    count: 1,
     _timestamp: new Date().toISOString(),
   };
 }

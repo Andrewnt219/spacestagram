@@ -1,4 +1,4 @@
-import { decrement, firestore, increment } from '@lib/firebase';
+import { firestore } from '@lib/firebase';
 import { PartiallyPartial } from '@utilities';
 import { PhotoLike } from '..';
 
@@ -40,18 +40,8 @@ export class PhotoLikesService {
     await collectionRef.doc(_id).update(data);
   }
 
-  static async increaseLike(_id: string) {
-    await this.update({
-      _id,
-      count: increment,
-    });
-  }
-
-  static async decreaseLike(_id: string) {
-    await this.update({
-      _id,
-      count: decrement,
-    });
+  static async delete(_id: string) {
+    await collectionRef.doc(_id).delete();
   }
 }
 
