@@ -1,4 +1,4 @@
-import { MarsRoverPhotosApi } from '@modules/mars-rover-photos';
+import { MarsRoversApi } from '@modules/mars-rovers';
 import { DisplayText, Layout } from '@shopify/polaris';
 import { getErrorMessage } from '@utils/api-utils';
 import type { NextPage } from 'next';
@@ -8,9 +8,8 @@ const Home: NextPage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data } = await MarsRoverPhotosApi.getAllRoverPhotos({
-          sol: 1000,
-          rover_id: 'opportunity',
+        const { data } = await MarsRoversApi.getRoverById({
+          rover_id: 'curiosity',
         });
 
         console.log(data);
