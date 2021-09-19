@@ -3,12 +3,13 @@ import {
   Photo_ToggleLike_GetQuery,
 } from '@api/photo/toggleLike';
 import { MarsRoverPhoto } from '@mars-rover-photos-api';
-import { useUserAuth } from '@modules/user-auth';
+import { selectUserAuth } from '@modules/user-auth';
 import { MediaCard } from '@shopify/polaris';
 import { getErrorMessage } from '@utils/api-utils';
 import axios from 'axios';
 import Image from 'next/image';
 import React, { PropsWithChildren } from 'react';
+import { useSelector } from 'react-redux';
 import { useImageSizes } from 'src/context';
 import css from 'styled-jsx/css';
 type PhotoCardProps = {
@@ -19,16 +20,16 @@ export const PhotoCard = ({
   children,
   ...props
 }: PropsWithChildren<PhotoCardProps>) => {
-  const userAuth = useUserAuth();
+  const userAuth = useSelector(selectUserAuth);
   const sizes = useImageSizes();
 
   const handlePrimaryActionClick = async () => {
-    if (!userAuth?.user_id) return;
+    if (!userAuth?.userId) return;
 
     try {
       const params: Photo_ToggleLike_GetQuery = {
         photo_id: props.photo.id.toString(),
-        user_id: userAuth?.user_id,
+        user_id: userAuth?.userId,
       };
       await axios.get<Photo_ToggleLike_GetData>('/api/photo/toggleLike', {
         params,
@@ -42,7 +43,9 @@ export const PhotoCard = ({
     <article>
       <MediaCard
         title={`Rover ${props.photo.rover.name} - ${props.photo.camera.full_name}`}
-        description={`Earth day: ${props.photo.earth_date}`}
+        description={`Earth day: ${new Date(
+          props.photo.earth_date
+        ).toDateString()}`}
         portrait
         primaryAction={{
           content: props.isLiked ? 'Unlike' : 'Like',
