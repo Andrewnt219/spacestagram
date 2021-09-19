@@ -5,12 +5,12 @@ import {
   MarsRoverPhotosQuery,
   MarsRoverPhotosResponse,
 } from '@mars-rover-photos-api';
-import { buildMarsRoverPhotosUrl } from '@modules/mars-rover-photos';
 import { PhotoLike } from '@modules/photo-likes';
-import { PhotoLikesService } from '@modules/photo-likes/server-index';
+import { PhotoLikesService } from '@modules/photo-likes/service';
 import { ResultError, ResultSuccess } from '@utils/api-utils';
 import { withApiHandler } from '@utils/with-api-handler';
 import type { NextApiHandler } from 'next';
+import queryString from 'query-string';
 
 type GetData = {
   favoritedPhotos: MarsRoverPhoto[];
@@ -24,7 +24,7 @@ const get: NextApiHandler<TResult<GetData>> = async (req, res) => {
 
   if (query.type === 'error') return res.status(400).json(query);
 
-  const url = buildMarsRoverPhotosUrl(query.data);
+  const url = buildUrl(query.data);
 
   const r = await fetch(url);
   if (!r.ok) return res.status(r.status).json(ResultError(r.statusText));
@@ -59,6 +59,16 @@ const validateQuery: ValidateQuery<Photos_Index_GetQuery> = (query) => {
   }
 
   return ResultSuccess(castedQuery);
+};
+
+const buildUrl = ({ rover_name, ...query }: MarsRoverPhotosQuery) => {
+  return queryString.stringifyUrl({
+    url: `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover_name}/photos`,
+    query: {
+      ...query,
+      api_key: process.env['NASA_API_KEY'],
+    },
+  });
 };
 
 export default withApiHandler({ get });

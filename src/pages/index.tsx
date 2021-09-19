@@ -1,5 +1,7 @@
+import { MarsRoverPhotosResponse } from '@mars-rover-photos-api';
 import {
-  fetchMarsRoverPhotos,
+  buildMarsRoverPhotosUrl,
+  fetchHomeMarsRoverPhotos,
   PhotoCard,
   selectPhotos,
 } from '@modules/mars-rover-photos';
@@ -7,40 +9,30 @@ import { PhotoCardSkeleton } from '@modules/mars-rover-photos/components/PhotoCa
 import { selectUserAuth } from '@modules/user-auth';
 import { Page } from '@shopify/polaris';
 import { createEmptyArray } from '@utils/array-utils';
-import type { NextPage } from 'next';
+import type { InferGetStaticPropsType, NextPage } from 'next';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'src/app/store';
 import { ImageSizesProvider } from 'src/context';
 import css from 'styled-jsx/css';
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Home: NextPage = () => {
+const Home: NextPage<Props> = (props) => {
+  console.log({ props });
+
   const userAuth = useSelector(selectUserAuth);
 
   const dispatch = useAppDispatch();
   const photosSelector = useSelector(selectPhotos);
 
   useEffect(() => {
-    userAuth?.userId &&
-      dispatch(
-        fetchMarsRoverPhotos({
-          rover_name: 'curiosity',
-          user_id: userAuth.userId,
-          sol: 1000,
-          page: 1,
-        })
-      );
+    userAuth?.userId && dispatch(fetchHomeMarsRoverPhotos());
   }, [dispatch, userAuth?.userId]);
 
   return (
     <Page title="Spacestagram" subtitle="Mars Rover Photos">
       <ImageSizesProvider value="(min-width: 640px) 20vw, 100vw">
         <ul className="photo-list" aria-label="Photo from rovers">
-          {photosSelector.status === 'pending' &&
-            createEmptyArray(4).map((_, index) => (
-              <PhotoCardSkeleton key={index} />
-            ))}
-
           {photosSelector.likedPhotos.map((photo) => (
             <li key={photo.id}>
               <PhotoCard photo={photo} isLiked />
@@ -52,6 +44,11 @@ const Home: NextPage = () => {
               <PhotoCard photo={photo} />
             </li>
           ))}
+
+          {photosSelector.status === 'pending' &&
+            createEmptyArray(4).map((_, index) => (
+              <PhotoCardSkeleton key={index} />
+            ))}
         </ul>
       </ImageSizesProvider>
 
@@ -69,4 +66,18 @@ const styles = css`
     padding: 0;
   }
 `;
+
+export const getStaticProps = async () => {
+  const url = buildMarsRoverPhotosUrl({ rover_name: 'curiosity' });
+
+  const r = await fetch(url);
+
+  const data = (await r.json()) as MarsRoverPhotosResponse;
+
+  return {
+    props: {
+      data,
+    },
+  };
+};
 export default Home;

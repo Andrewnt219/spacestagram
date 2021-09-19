@@ -1,18 +1,5 @@
-import { Photos_Index_GetData, Photos_Index_GetQuery } from '@api/photos';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'src/app/store';
-
-export const fetchUser = createAsyncThunk(
-  'user/fetchUser',
-  async (params?: Photos_Index_GetQuery) => {
-    const { data } = await axios.get<Photos_Index_GetData>('/api/photos', {
-      params,
-    });
-
-    return data;
-  }
-);
 
 export interface UserAuthState {
   userId: string | null;
@@ -23,7 +10,7 @@ const initialState: UserAuthState = {
 };
 
 export const userAuthSlice = createSlice({
-  name: 'photos',
+  name: 'userAuth',
   initialState,
   reducers: {
     login: (state, action: PayloadAction<{ userId: string }>) => {

@@ -1,15 +1,10 @@
-import {
-  Photo_ToggleLike_GetData,
-  Photo_ToggleLike_GetQuery,
-} from '@api/photo/toggleLike';
 import { MarsRoverPhoto } from '@mars-rover-photos-api';
-import { selectUserAuth } from '@modules/user-auth';
+import { selectPhotos, toggleLike } from '@modules/mars-rover-photos';
 import { MediaCard } from '@shopify/polaris';
-import { getErrorMessage } from '@utils/api-utils';
-import axios from 'axios';
 import Image from 'next/image';
 import React, { PropsWithChildren } from 'react';
 import { useSelector } from 'react-redux';
+import { useAppDispatch } from 'src/app/store';
 import { useImageSizes } from 'src/context';
 import css from 'styled-jsx/css';
 type PhotoCardProps = {
@@ -20,23 +15,12 @@ export const PhotoCard = ({
   children,
   ...props
 }: PropsWithChildren<PhotoCardProps>) => {
-  const userAuth = useSelector(selectUserAuth);
   const sizes = useImageSizes();
+  const photosSelector = useSelector(selectPhotos);
+  const dispatch = useAppDispatch();
 
   const handlePrimaryActionClick = async () => {
-    if (!userAuth?.userId) return;
-
-    try {
-      const params: Photo_ToggleLike_GetQuery = {
-        photo_id: props.photo.id.toString(),
-        user_id: userAuth?.userId,
-      };
-      await axios.get<Photo_ToggleLike_GetData>('/api/photo/toggleLike', {
-        params,
-      });
-    } catch (error) {
-      console.log(getErrorMessage(error));
-    }
+    dispatch(toggleLike(props.photo.id.toString()));
   };
 
   return (
@@ -48,7 +32,12 @@ export const PhotoCard = ({
         ).toDateString()}`}
         portrait
         primaryAction={{
-          content: props.isLiked ? 'Unlike' : 'Like',
+          content:
+            photosSelector.status === 'pending'
+              ? 'Waiting...'
+              : props.isLiked
+              ? 'Unlike'
+              : 'Like',
           onAction: handlePrimaryActionClick,
         }}
       >
