@@ -1,10 +1,16 @@
-import { fetchMarsRoverPhotos, PhotoCard } from '@modules/mars-rover-photos';
+import {
+  fetchMarsRoverPhotos,
+  PhotoCard,
+  selectPhotos,
+} from '@modules/mars-rover-photos';
+import { PhotoCardSkeleton } from '@modules/mars-rover-photos/components/PhotoCardSkeleton';
 import { useUserAuth } from '@modules/user-auth';
-import { Frame, Page, Spinner } from '@shopify/polaris';
+import { Frame, Page } from '@shopify/polaris';
+import { createEmptyArray } from '@utils/array-utils';
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from 'src/app/store';
+import { useAppDispatch } from 'src/app/store';
 import { ImageSizesProvider } from 'src/context';
 import css from 'styled-jsx/css';
 
@@ -12,7 +18,7 @@ const Home: NextPage = () => {
   const userAuth = useUserAuth();
 
   const dispatch = useAppDispatch();
-  const photosSelector = useSelector((state: RootState) => state.photos);
+  const photosSelector = useSelector(selectPhotos);
 
   useEffect(() => {
     userAuth?.user_id &&
@@ -30,10 +36,12 @@ const Home: NextPage = () => {
     <Frame>
       <Page title="Spacestagram" subtitle="Mars Rover Photos">
         <ImageSizesProvider value="(min-width: 640px) 20vw, 100vw">
-          {photosSelector.status === 'pending' && (
-            <Spinner accessibilityLabel="Fetching photos" />
-          )}
           <ul className="photo-list" aria-label="Photo from rovers">
+            {photosSelector.status === 'pending' &&
+              createEmptyArray(4).map((_, index) => (
+                <PhotoCardSkeleton key={index} />
+              ))}
+
             {photosSelector.likedPhotos.map((photo) => (
               <li key={photo.id}>
                 <PhotoCard photo={photo} isLiked />

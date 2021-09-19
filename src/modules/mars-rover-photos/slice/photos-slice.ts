@@ -4,6 +4,7 @@ import { MarsRoverPhoto } from '@mars-rover-photos-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getErrorMessage } from '@utils/api-utils';
 import axios from 'axios';
+import { RootState } from 'src/app/store';
 
 export const fetchMarsRoverPhotos = createAsyncThunk(
   'photos/fetchPhotos',
@@ -51,5 +52,7 @@ export const photosSlice = createSlice({
       });
   },
 });
+
+export const selectPhotos = (state: RootState) => state.photos;
 
 export const photosReducer = photosSlice.reducer;
