@@ -13,6 +13,7 @@ import { useImageSizes } from 'src/context';
 import css from 'styled-jsx/css';
 type PhotoCardProps = {
   photo: MarsRoverPhoto;
+  isLiked?: boolean;
 };
 export const PhotoCard = ({
   children,
@@ -44,7 +45,7 @@ export const PhotoCard = ({
         description={`Earth day: ${props.photo.earth_date}`}
         portrait
         primaryAction={{
-          content: 'Like',
+          content: props.isLiked ? 'Unlike' : 'Like',
           onAction: handlePrimaryActionClick,
         }}
       >

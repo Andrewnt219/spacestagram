@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.1",
     "@shopify/polaris": "^6.6.0",
     "axios": "^0.21.4",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -18,7 +19,8 @@
     "query-string": "^7.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-query": "^3.23.2"
+    "react-redux": "^7.2.5",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@types/react": "17.0.21",
