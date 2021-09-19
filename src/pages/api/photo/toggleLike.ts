@@ -6,14 +6,11 @@ import { ResultError, ResultSuccess } from '@utils/api-utils';
 import { withApiHandler } from '@utils/with-api-handler';
 import { NextApiHandler } from 'next';
 
-type PatchData = PhotoLike;
-export type Photo_IncraseLike_PatchData = TResultSuccess<PatchData>;
-export type Photo_IncraseLike_PatchQuery = Pick<
-  PhotoLike,
-  'photo_id' | 'user_id'
->;
+type GetData = PhotoLike;
+export type Photo_ToggleLike_GetData = TResultSuccess<GetData>;
+export type Photo_ToggleLike_GetQuery = Pick<PhotoLike, 'photo_id' | 'user_id'>;
 
-const get: NextApiHandler<TResult<PatchData>> = async (req, res) => {
+const get: NextApiHandler<TResult<GetData>> = async (req, res) => {
   const query = validateQuery(req.query);
   if (query.type === 'error') return res.status(400).json(query);
 
@@ -28,8 +25,8 @@ const get: NextApiHandler<TResult<PatchData>> = async (req, res) => {
   return res.status(201).json(ResultSuccess(newPhotoLike));
 };
 
-const validateQuery: ValidateQuery<Photo_IncraseLike_PatchQuery> = (query) => {
-  const castedQuery = query as Photo_IncraseLike_PatchQuery;
+const validateQuery: ValidateQuery<Photo_ToggleLike_GetQuery> = (query) => {
+  const castedQuery = query as Photo_ToggleLike_GetQuery;
 
   if (typeof castedQuery.photo_id !== 'string') {
     return ResultError('Missing photo_id');

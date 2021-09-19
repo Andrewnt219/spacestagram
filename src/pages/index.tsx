@@ -1,12 +1,15 @@
-import { MarsRoverPhotosApi } from '@modules/mars-rover-photos';
+import { MarsRoverPhoto } from '@mars-rover-photos-api';
+import { MarsRoverPhotosApi, PhotoCard } from '@modules/mars-rover-photos';
 import { useUserAuth } from '@modules/user-auth';
-import { DisplayText, Layout } from '@shopify/polaris';
+import { Frame, Page } from '@shopify/polaris';
 import { getErrorMessage } from '@utils/api-utils';
 import type { NextPage } from 'next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import css from 'styled-jsx/css';
 
 const Home: NextPage = () => {
   const userAuth = useUserAuth();
+  const [photos, setPhotos] = useState<MarsRoverPhoto[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -20,7 +23,7 @@ const Home: NextPage = () => {
           page: 1,
         });
 
-        console.log(data);
+        setPhotos(data.data.nonFavoritedPhotos);
       } catch (error) {
         console.log(getErrorMessage(error));
       }
@@ -29,10 +32,29 @@ const Home: NextPage = () => {
     fetchData();
   }, [userAuth?.user_id]);
   return (
-    <Layout.Section>
-      <DisplayText size="extraLarge">Shopify Challenge</DisplayText>
-    </Layout.Section>
+    <Frame>
+      <Page title="Spacestagram" subtitle="Mars Rover Photos">
+        <ul className="photo-list" aria-label="Photo from rovers">
+          {photos.map((photo) => (
+            <li key={photo.id}>
+              <PhotoCard photo={photo} />
+            </li>
+          ))}
+        </ul>
+
+        <style jsx>{styles}</style>
+      </Page>
+    </Frame>
   );
 };
 
+const styles = css`
+  .photo-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(40rem, 100%), 1fr));
+    gap: 2rem;
+    list-style: none;
+    padding: 0;
+  }
+`;
 export default Home;
