@@ -1,5 +1,5 @@
 import {
-  fetchHomeMarsRoverPhotos,
+  fetchMarsRoverPhotos,
   PhotoCard,
   selectPhotos,
 } from '@modules/mars-rover-photos';
@@ -21,7 +21,14 @@ const Home: NextPage = () => {
   const photosSelector = useSelector(selectPhotos);
 
   useEffect(() => {
-    userAuth?.userId && dispatch(fetchHomeMarsRoverPhotos());
+    userAuth?.userId &&
+      dispatch(
+        fetchMarsRoverPhotos({
+          rover_name: 'curiosity',
+          sol: 0,
+          page: 1,
+        })
+      );
   }, [dispatch, userAuth?.userId]);
 
   return (
