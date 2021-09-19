@@ -5,11 +5,11 @@ import { ResultError, ResultSuccess } from '@utils/api-utils';
 import { withApiHandler } from '@utils/with-api-handler';
 import { NextApiHandler } from 'next';
 
-type GetData = PhotoLike;
-export type Photo_Unlike_GetData = TResultSuccess<GetData>;
-export type Photo_Unlike_GetQuery = Pick<PhotoLike, 'photo_id' | 'user_id'>;
+type DeleteData = PhotoLike;
+export type Photo_Unlike_DeleteData = TResultSuccess<DeleteData>;
+export type Photo_Unlike_DeleteQuery = Pick<PhotoLike, 'photo_id' | 'user_id'>;
 
-const get: NextApiHandler<TResult<GetData>> = async (req, res) => {
+const deleteHandler: NextApiHandler<TResult<DeleteData>> = async (req, res) => {
   const query = validateQuery(req.query);
   if (query.type === 'error') return res.status(400).json(query);
 
@@ -22,8 +22,8 @@ const get: NextApiHandler<TResult<GetData>> = async (req, res) => {
   return res.status(201).json(ResultSuccess(photoLike));
 };
 
-const validateQuery: ValidateQuery<Photo_Unlike_GetQuery> = (query) => {
-  const castedQuery = query as Photo_Unlike_GetQuery;
+const validateQuery: ValidateQuery<Photo_Unlike_DeleteQuery> = (query) => {
+  const castedQuery = query as Photo_Unlike_DeleteQuery;
 
   if (typeof castedQuery.photo_id !== 'string') {
     return ResultError('Missing photo_id');
@@ -36,4 +36,4 @@ const validateQuery: ValidateQuery<Photo_Unlike_GetQuery> = (query) => {
   return ResultSuccess(castedQuery);
 };
 
-export default withApiHandler({ get });
+export default withApiHandler({ delete: deleteHandler });
