@@ -14,7 +14,7 @@ const Home: NextPage = () => {
 
       try {
         const { data } = await MarsRoverPhotosApi.getAllRoverPhotos({
-          rover_id: 'curiosity',
+          rover_name: 'curiosity',
           user_id: userAuth.user_id,
           sol: 1000,
           page: 1,

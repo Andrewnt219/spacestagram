@@ -1,6 +1,6 @@
 declare module '@mars-rover-photos-api' {
   type CuriosityCamera = {
-    rover_id: 'curiosity';
+    rover_name: 'curiosity';
     abbreviation:
       | 'FHAZ'
       | 'RHAZ'
@@ -12,12 +12,12 @@ declare module '@mars-rover-photos-api' {
   };
 
   type OpportunityCamera = {
-    rover_id: 'opportunity';
+    rover_name: 'opportunity';
     abbreviation: 'FHAZ' | 'RHAZ' | 'NAVCAM' | 'PANCAM' | 'MINIES';
   };
 
   type SpiritCamera = {
-    rover_id: 'spirit';
+    rover_name: 'spirit';
     abbreviation: 'FHAZ' | 'RHAZ' | 'NAVCAM' | 'PANCAM' | 'MINIES';
   };
 
@@ -27,7 +27,7 @@ declare module '@mars-rover-photos-api' {
     sol?: number;
     camera?: RoverCamera['abbreviation'];
     page?: number;
-    rover_id: RoverCamera['rover_id'];
+    rover_name: RoverCamera['rover_name'];
   };
 
   type MarsRoverPhoto = {

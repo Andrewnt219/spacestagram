@@ -50,8 +50,8 @@ const get: NextApiHandler<TResult<GetData>> = async (req, res) => {
 const validateQuery: ValidateQuery<Photos_Index_GetQuery> = (query) => {
   const castedQuery = query as Photos_Index_GetQuery;
 
-  if (typeof castedQuery.rover_id !== 'string') {
-    return ResultError('Missing rover_id');
+  if (typeof castedQuery.rover_name !== 'string') {
+    return ResultError('Missing rover_name');
   }
 
   if (typeof castedQuery.user_id !== 'string') {

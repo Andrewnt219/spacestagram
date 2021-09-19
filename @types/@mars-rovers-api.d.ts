@@ -18,6 +18,6 @@ declare module '@mars-rover-api' {
   type MarsRoversResponse = { rovers: Rover[] };
   type MarsRoverResponse = { rover: Rover };
   type MarsRoverQuery = {
-    rover_id: string;
+    rover_name: string;
   };
 }
