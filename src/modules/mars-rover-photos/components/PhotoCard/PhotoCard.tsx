@@ -26,10 +26,10 @@ export const PhotoCard = ({
   return (
     <article>
       <MediaCard
-        title={`Rover ${props.photo.rover.name} - ${props.photo.camera.full_name}`}
-        description={`Earth day: ${new Date(
-          props.photo.earth_date
-        ).toDateString()}`}
+        title={`#${props.photo.id}`}
+        description={`Rover ${props.photo.rover.name} - ${
+          props.photo.camera.full_name
+        }. Earth day: ${new Date(props.photo.earth_date).toLocaleDateString()}`}
         portrait
         primaryAction={{
           content:
