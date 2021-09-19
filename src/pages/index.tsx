@@ -1,6 +1,4 @@
-import { MarsRoverPhotosResponse } from '@mars-rover-photos-api';
 import {
-  buildMarsRoverPhotosUrl,
   fetchHomeMarsRoverPhotos,
   PhotoCard,
   selectPhotos,
@@ -9,17 +7,14 @@ import { PhotoCardSkeleton } from '@modules/mars-rover-photos/components/PhotoCa
 import { selectUserAuth } from '@modules/user-auth';
 import { Page } from '@shopify/polaris';
 import { createEmptyArray } from '@utils/array-utils';
-import type { InferGetStaticPropsType, NextPage } from 'next';
+import type { NextPage } from 'next';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'src/app/store';
 import { ImageSizesProvider } from 'src/context';
 import css from 'styled-jsx/css';
-type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Home: NextPage<Props> = (props) => {
-  console.log({ props });
-
+const Home: NextPage = () => {
   const userAuth = useSelector(selectUserAuth);
 
   const dispatch = useAppDispatch();
@@ -67,17 +62,4 @@ const styles = css`
   }
 `;
 
-export const getStaticProps = async () => {
-  const url = buildMarsRoverPhotosUrl({ rover_name: 'curiosity' });
-
-  const r = await fetch(url);
-
-  const data = (await r.json()) as MarsRoverPhotosResponse;
-
-  return {
-    props: {
-      data,
-    },
-  };
-};
 export default Home;
