@@ -16,5 +16,9 @@ export const MainLayout = ({
     dispatch(userAuthSlice.actions.login({ userId }));
   }, [dispatch]);
 
-  return <Frame>{children}</Frame>;
+  return (
+    <Frame>
+      <main>{children}</main>
+    </Frame>
+  );
 };
