@@ -11,7 +11,7 @@ export const MainLayout = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const userId = localStorage.getItem('user_id') ?? nanoid(16);
+    const userId = localStorage.getItem('userId') ?? nanoid(16);
 
     dispatch(userAuthSlice.actions.login({ userId }));
   }, [dispatch]);
