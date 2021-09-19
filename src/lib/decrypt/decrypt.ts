@@ -3,6 +3,8 @@ import crypto from 'crypto';
 const ALGORITHM = 'aes-128-cbc';
 
 /**
+ * Decrypt a AES-128-cbc algorithm
+ *
  * @param source get from https://www.devglan.com/online-tools/aes-encryption-decryption
  */
 export const decrypt = <Result>(

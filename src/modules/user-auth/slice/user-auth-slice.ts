@@ -13,6 +13,7 @@ export const userAuthSlice = createSlice({
   name: 'userAuth',
   initialState,
   reducers: {
+    /** Log the user in and remember it. Null if fail to storing credentails */
     login: (state, action: PayloadAction<{ userId: string }>) => {
       state.userId = action.payload.userId;
 

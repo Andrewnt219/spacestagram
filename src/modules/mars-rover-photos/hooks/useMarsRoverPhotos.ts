@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'src/app/store';
 import { fetchMarsRoverPhotos, selectPhotos } from '../slice';
 
+/** Fetch photos with specified params. Also update the global store. */
 export const useMarsRoverPhotos = (
   params: Omit<Photos_Index_GetQuery, 'user_id'>
 ) => {

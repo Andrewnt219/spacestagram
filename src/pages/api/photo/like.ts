@@ -10,6 +10,7 @@ type PostData = PhotoLike;
 export type Photo_Like_PostData = TResultSuccess<PostData>;
 export type Photo_Like_PostBody = Pick<PhotoLike, 'photo_id' | 'user_id'>;
 
+/** Add a liked photo to the user's favorite list */
 const post: NextApiHandler<TResult<PostData>> = async (req, res) => {
   const body = validateBody(req.body);
   if (body.type === 'error') return res.status(400).json(body);

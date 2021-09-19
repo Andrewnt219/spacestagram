@@ -5,6 +5,8 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import { useAppDispatch } from 'src/app/store';
 
 type MainLayoutProps = {};
+
+/** Page layout to store navigations, drawers, footer, etc. */
 export const MainLayout = ({
   children,
 }: PropsWithChildren<MainLayoutProps>) => {

@@ -68,6 +68,8 @@ src
         +-- utils             # feature-related utilities
 ```
 
+:star2: Silky smooth `TResult<Data>` system that I have improved over many Next.js projects [@common.d.ts](https://github.com/Andrewnt219/spacestagram/blob/main/%40types/%40common.d.ts), [api-utils](https://github.com/Andrewnt219/spacestagram/blob/main/src/utils/api-utils.ts), [with-api-handler](https://github.com/Andrewnt219/spacestagram/blob/main/src/utils/with-api-handler.ts)
+
 :star2: Backend for fetching photos: [photos.ts](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photos.ts)
 
 :star2: Backend for liking a photo: [like.ts](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photo/like.ts)

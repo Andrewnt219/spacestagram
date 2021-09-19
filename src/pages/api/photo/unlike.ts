@@ -9,6 +9,7 @@ type DeleteData = PhotoLike;
 export type Photo_Unlike_DeleteData = TResultSuccess<DeleteData>;
 export type Photo_Unlike_DeleteQuery = Pick<PhotoLike, 'photo_id' | 'user_id'>;
 
+/** Remove the liked photo of a user */
 const deleteHandler: NextApiHandler<TResult<DeleteData>> = async (req, res) => {
   const query = validateQuery(req.query);
   if (query.type === 'error') return res.status(400).json(query);

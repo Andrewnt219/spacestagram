@@ -6,6 +6,7 @@ import {
 } from '@shopify/polaris';
 import React from 'react';
 
+/** A skeleton with roughly the same size as `PhotoCard` */
 export const PhotoCardSkeleton = () => {
   return (
     <Card sectioned>

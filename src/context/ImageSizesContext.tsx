@@ -4,6 +4,7 @@ const ImageSizesContext = createContext<ImageSizesContext | undefined>(
   undefined
 );
 
+/** Provide the layout sizes for responsive images in consumed components  */
 type ImageSizesProviderProps = {
   children: ReactNode | ReactNode[];
   value: ImageSizesContext;
@@ -19,6 +20,7 @@ const ImageSizesProvider = ({
   );
 };
 
+/** Get the layout image sizes from the nearest ImageSizesProvider */
 const useImageSizes = (): ImageSizesContext => {
   const context = useContext(ImageSizesContext);
 

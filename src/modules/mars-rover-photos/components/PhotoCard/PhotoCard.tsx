@@ -12,9 +12,12 @@ import { useAppDispatch } from 'src/app/store';
 import { useImageSizes } from 'src/context';
 import css from 'styled-jsx/css';
 type PhotoCardProps = {
+  /** The data of the photo */
   photo: MarsRoverPhoto;
+  /** Whether this photo is liked or not */
   isLiked?: boolean;
 };
+/** A media card with info and like action for a photo */
 export const PhotoCard = ({
   children,
   ...props

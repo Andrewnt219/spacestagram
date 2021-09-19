@@ -19,6 +19,10 @@ type GetData = {
 export type Photos_Index_GetData = TResultSuccess<GetData>;
 export type Photos_Index_GetQuery = MarsRoverPhotosQuery &
   Pick<PhotoLike, 'user_id'>;
+
+/**
+ * Fetch photos from [NASA Mars Rover Photo API](https://api.nasa.gov/), and categorize them into favorite or non-favorite photos
+ */
 const get: NextApiHandler<TResult<GetData>> = async (req, res) => {
   const query = validateQuery(req.query);
 
@@ -61,6 +65,7 @@ const validateQuery: ValidateQuery<Photos_Index_GetQuery> = (query) => {
   return ResultSuccess(castedQuery);
 };
 
+/** A helper function for building the url for the api with stringified query */
 const buildApiUrl = ({ rover_name, ...query }: MarsRoverPhotosQuery) => {
   return queryString.stringifyUrl({
     url: `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover_name}/photos`,

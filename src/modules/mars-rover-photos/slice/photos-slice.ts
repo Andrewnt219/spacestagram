@@ -13,6 +13,7 @@ import { getErrorMessage } from '@utils/api-utils';
 import { RootState } from 'src/app/store';
 import { PhotoApi, PhotosApi } from '../api';
 
+/** Action to refetch the cached photos and fetching query */
 export const fetchMarsRoverPhotos = createAsyncThunk(
   'photos/fetchPhotos',
   async (
@@ -33,6 +34,7 @@ export const fetchMarsRoverPhotos = createAsyncThunk(
   }
 );
 
+/** Action to refetch photos with the current fetching query */
 export const invalidateMarsRoverPhotos = createAsyncThunk(
   'photos/invalidatePhotos',
   async (_, { dispatch, getState }) => {
@@ -42,6 +44,7 @@ export const invalidateMarsRoverPhotos = createAsyncThunk(
   }
 );
 
+/** Action to like a photo and updated category of cached photos */
 export const likePhoto = createAsyncThunk(
   'photos/likePhoto',
   async (photo_id: string, { getState, rejectWithValue }) => {
@@ -54,6 +57,7 @@ export const likePhoto = createAsyncThunk(
   }
 );
 
+/** Action to unlike a photo and updated category of cached photos */
 export const unlikePhoto = createAsyncThunk(
   'photos/unlkePhoto',
   async (photo_id: string, { getState, rejectWithValue }) => {
@@ -71,6 +75,7 @@ export interface PhotoState {
   nonLikedPhotos: MarsRoverPhoto[];
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: HasMessage | null;
+  /** The query for fetching photos */
   query: Omit<Photos_Index_GetQuery, 'user_id'>;
 }
 
@@ -90,6 +95,7 @@ export const photosSlice = createSlice({
   name: 'photos',
   initialState,
   reducers: {
+    /** Update the fetching query. This does NOT trigger refetch */
     updateQuery: (
       state,
       action: PayloadAction<Partial<PhotoState['query']>>
@@ -99,12 +105,14 @@ export const photosSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      /** Update the cached photos  */
       .addCase(fetchMarsRoverPhotos.fulfilled, (state, action) => {
         state.status = 'succeeded';
 
         state.likedPhotos = action.payload.data.favoritedPhotos;
         state.nonLikedPhotos = action.payload.data.nonFavoritedPhotos;
       })
+      /** Move the payload photo from `nonLikedPhotos` to `likedPhotos` */
       .addCase(likePhoto.fulfilled, (state, action) => {
         state.status = 'succeeded';
 
@@ -118,6 +126,7 @@ export const photosSlice = createSlice({
           (photo) => photo.id.toString() !== action.payload.photo_id
         );
       })
+      /** Move the payload photo from `likedPhotos` to `nonLikedPhotos` */
       .addCase(unlikePhoto.fulfilled, (state, action) => {
         state.status = 'succeeded';
 

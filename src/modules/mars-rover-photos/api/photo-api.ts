@@ -7,6 +7,7 @@ import axios from 'axios';
 
 const api = axios.create({ baseURL: '/api/photo' });
 
+/** A collection of methods for calling `/api/photo` endpoints */
 export class PhotoApi {
   static async likePhoto(body: Photo_Like_PostBody) {
     await api.post<Photo_Like_PostData>('/like', body);
