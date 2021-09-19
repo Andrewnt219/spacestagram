@@ -1,34 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-007ACC?style=for-the-badge&logo=TypeScript&logoColor=white" /><img alt="Next.js" src="https://img.shields.io/badge/-Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white" /><img alt="Redux" src="https://img.shields.io/badge/-Redux-764ABC?style=for-the-badge&logo=Redux&logoColor=white" /><img alt="Shopify" src="https://img.shields.io/badge/-Polaris-7ab55c?style=for-the-badge&logo=Shopify&logoColor=white" /><img alt="Firebase" src="https://img.shields.io/badge/-Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white" />
 
-## Getting Started
+# Spacestagram :rocket:
 
-First, run the development server:
+This is a submission for [Shopify Challenge Winter 2022](https://www.shopify.ca/careers/frontend-developer-intern-remote-winter-2022-6932cbed). A curated list of images from [NASA Open API - Mars Rover Photos](https://api.nasa.gov/).
 
-```bash
-npm run dev
-# or
-yarn dev
+Demo link: [https://spacestagram-gamma.vercel.app/](https://spacestagram-gamma.vercel.app/)
+
+![Demo](assets/demo.gif)
+
+## Features :fire:
+
+:sparkles: Display images from Mars Rover Photos API
+
+:sparkles: Like and unlike images.
+
+:sparkles: Persist liked images on page refresh
+
+:sparkles: Loading skeletons
+
+Core web vitals:
+
+![Lighthouse](assets/lighthouse.jpg)
+
+## Navigates the project :dizzy:
+
+The structure is inspired by [Bulletproof React](https://github.com/alan2207/bulletproof-react).
+
+```
+src
+|
++-- app           # global Redux store
+|
++-- context       # project-wide React contexts
+|
++-- lib           # third-party libraries
+|
++-- modules       # feature based modules
+|
++-- pages         # Next.js preserved dir for pages
+|   |
+|   +-- api       # Next.js serverless functions with REST standard
+|
++-- ui            # project-wide components
+|
++-- utils         # project-wide utilities
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```
+src
+|
++-- modules
+    |
+    +-- mars-rover-photos
+        |
+        +-- api               # typed axios calls
+        |
+        +-- components        # feature-related components
+        |
+        +-- model             # object schemas
+        |
+        +-- slice             # Redux slices
+        |
+        +-- service           # typed database calls
+        |
+        +-- utils             # feature-related utilities
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+:star2: Backend for fetching photos: [photos.ts](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photos.ts)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+:star2: Backend for liking a photo: [like.ts](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photo/like.ts)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+:star2: Backend for unliking a photo: [unlike.ts](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photo/unlike.ts)
 
-## Learn More
+:star2: Reducers for fetching photos, toggling like: [photos-slice.ts](https://github.com/Andrewnt219/spacestagram/blob/main/src/modules/mars-rover-photos/slice/photos-slice.ts)
 
-To learn more about Next.js, take a look at the following resources:
+## Technical decisions :collision:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+:exclamation: I chose to implement [`/api/photo/like`](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photo/like.ts) (POST) and [`/api/photo/unlike`](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photo/unlike.ts) (DELETE) over `/api/photo/toggleLike` (GET) because it made more sense for RESTful API. It also helped differentiate Redux actions, and avoided having flagged paths in all the codes that call it (single-responsibility principle).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+:exclamation: POST [`/api/photos`](https://github.com/Andrewnt219/spacestagram/blob/main/src/pages/api/photos.ts) responses with `favorited_photos` and `nonfavorited_photos` rather than putting `isFavorited` inside [`MarsRoverPhoto`](https://github.com/Andrewnt219/spacestagram/blob/main/%40types/%40mars-rover-photos-api.d.ts) schema. The decision was made to avoid cluttering schemas with another model like `MarsRoverPhotoWithFavorite`, but still keep the flexibility for the frontend to put `isFavorited` inside with `map()` for example.
