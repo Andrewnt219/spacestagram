@@ -20,7 +20,6 @@ export const fetchMarsRoverPhotos = createAsyncThunk(
     { getState, rejectWithValue, dispatch }
   ) => {
     const { userAuth } = getState() as RootState;
-
     if (!userAuth.userId) return rejectWithValue('Missing user_id');
 
     const data = await PhotosApi.fetchMarsRoverPhotos({
@@ -43,16 +42,27 @@ export const invalidateMarsRoverPhotos = createAsyncThunk(
   }
 );
 
-export const toggleLike = createAsyncThunk(
-  'photos/toggleLike',
-  async (photo_id: string, { getState, dispatch, rejectWithValue }) => {
+export const likePhoto = createAsyncThunk(
+  'photos/likePhoto',
+  async (photo_id: string, { getState, rejectWithValue }) => {
     const { userAuth } = getState() as RootState;
-
     if (!userAuth.userId) return rejectWithValue('Missing user_id');
 
-    await PhotoApi.toggleLike({ photo_id, user_id: userAuth.userId });
+    await PhotoApi.likePhoto({ photo_id, user_id: userAuth.userId });
 
-    dispatch(invalidateMarsRoverPhotos());
+    return { photo_id };
+  }
+);
+
+export const unlikePhoto = createAsyncThunk(
+  'photos/unlkePhoto',
+  async (photo_id: string, { getState, rejectWithValue }) => {
+    const { userAuth } = getState() as RootState;
+    if (!userAuth.userId) return rejectWithValue('Missing user_id');
+
+    await PhotoApi.unlikePhoto({ photo_id, user_id: userAuth.userId });
+
+    return { photo_id };
   }
 );
 
@@ -94,6 +104,32 @@ export const photosSlice = createSlice({
 
         state.likedPhotos = action.payload.data.favoritedPhotos;
         state.nonLikedPhotos = action.payload.data.nonFavoritedPhotos;
+      })
+      .addCase(likePhoto.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+
+        const likedPhoto = state.nonLikedPhotos.find(
+          (photo) => photo.id.toString() === action.payload.photo_id
+        );
+        if (!likedPhoto) return state;
+
+        state.likedPhotos.push(likedPhoto);
+        state.nonLikedPhotos = state.nonLikedPhotos.filter(
+          (photo) => photo.id.toString() !== action.payload.photo_id
+        );
+      })
+      .addCase(unlikePhoto.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+
+        const unlikedPhoto = state.likedPhotos.find(
+          (photo) => photo.id.toString() === action.payload.photo_id
+        );
+        if (!unlikedPhoto) return state;
+
+        state.nonLikedPhotos.push(unlikedPhoto);
+        state.likedPhotos = state.likedPhotos.filter(
+          (photo) => photo.id.toString() !== action.payload.photo_id
+        );
       })
       .addMatcher(isFulfilled, (state) => {
         state.status = 'succeeded';

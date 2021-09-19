@@ -1,5 +1,9 @@
 import { MarsRoverPhoto } from '@mars-rover-photos-api';
-import { selectPhotos, toggleLike } from '@modules/mars-rover-photos';
+import {
+  likePhoto,
+  selectPhotos,
+  unlikePhoto,
+} from '@modules/mars-rover-photos';
 import { MediaCard } from '@shopify/polaris';
 import Image from 'next/image';
 import React, { PropsWithChildren } from 'react';
@@ -20,7 +24,9 @@ export const PhotoCard = ({
   const dispatch = useAppDispatch();
 
   const handlePrimaryActionClick = async () => {
-    dispatch(toggleLike(props.photo.id.toString()));
+    props.isLiked
+      ? dispatch(unlikePhoto(props.photo.id.toString()))
+      : dispatch(likePhoto(props.photo.id.toString()));
   };
 
   return (
