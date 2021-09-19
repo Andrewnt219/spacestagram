@@ -57,6 +57,8 @@ src
         |
         +-- components        # feature-related components
         |
+        +-- hooks             # custom hooks
+        |
         +-- model             # object schemas
         |
         +-- slice             # Redux slices

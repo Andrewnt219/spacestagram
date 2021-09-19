@@ -1,36 +1,21 @@
-import {
-  fetchMarsRoverPhotos,
-  PhotoCard,
-  selectPhotos,
-} from '@modules/mars-rover-photos';
+import { Photos_Index_GetQuery } from '@api/photos';
+import { PhotoCard, useMarsRoverPhotos } from '@modules/mars-rover-photos';
 import { PhotoCardSkeleton } from '@modules/mars-rover-photos/components/PhotoCardSkeleton';
-import { selectUserAuth } from '@modules/user-auth';
 import { Page } from '@shopify/polaris';
 import { createEmptyArray } from '@utils/array-utils';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'src/app/store';
 import { ImageSizesProvider } from 'src/context';
 import css from 'styled-jsx/css';
 
+const params: Omit<Photos_Index_GetQuery, 'user_id'> = {
+  rover_name: 'curiosity',
+  sol: 0,
+  page: 1,
+};
+
 const Home: NextPage = () => {
-  const userAuth = useSelector(selectUserAuth);
-
-  const dispatch = useAppDispatch();
-  const photosSelector = useSelector(selectPhotos);
-
-  useEffect(() => {
-    userAuth?.userId &&
-      dispatch(
-        fetchMarsRoverPhotos({
-          rover_name: 'curiosity',
-          sol: 0,
-          page: 1,
-        })
-      );
-  }, [dispatch, userAuth?.userId]);
+  const photosSelector = useMarsRoverPhotos(params);
 
   return (
     <Page title="Spacestagram" subtitle="Mars Rover Photos">
