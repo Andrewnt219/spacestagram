@@ -1,8 +1,4 @@
-import {
-  Photo_ToggleLike_GetData,
-  Photo_ToggleLike_GetQuery,
-} from '@api/photo/toggleLike';
-import { Photos_Index_GetData, Photos_Index_GetQuery } from '@api/photos';
+import { Photos_Index_GetQuery } from '@api/photos';
 import { HasMessage } from '@common';
 import { MarsRoverPhoto } from '@mars-rover-photos-api';
 import {
@@ -14,8 +10,8 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { getErrorMessage } from '@utils/api-utils';
-import axios from 'axios';
 import { RootState } from 'src/app/store';
+import { PhotoApi, PhotosApi } from '../api';
 
 export const fetchMarsRoverPhotos = createAsyncThunk(
   'photos/fetchPhotos',
@@ -27,12 +23,9 @@ export const fetchMarsRoverPhotos = createAsyncThunk(
 
     if (!userAuth.userId) return rejectWithValue('Missing user_id');
 
-    const params: Photos_Index_GetQuery = {
+    const data = await PhotosApi.fetchMarsRoverPhotos({
       ...query,
       user_id: userAuth.userId,
-    };
-    const { data } = await axios.get<Photos_Index_GetData>('/api/photos', {
-      params,
     });
 
     dispatch(photosSlice.actions.updateQuery(query));
@@ -57,14 +50,7 @@ export const toggleLike = createAsyncThunk(
 
     if (!userAuth.userId) return rejectWithValue('Missing user_id');
 
-    const params: Photo_ToggleLike_GetQuery = {
-      photo_id,
-      user_id: userAuth.userId,
-    };
-
-    await axios.get<Photo_ToggleLike_GetData>('/api/photo/toggleLike', {
-      params,
-    });
+    await PhotoApi.toggleLike({ photo_id, user_id: userAuth.userId });
 
     dispatch(invalidateMarsRoverPhotos());
   }
