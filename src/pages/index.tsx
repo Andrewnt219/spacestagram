@@ -5,6 +5,7 @@ import { Frame, Page } from '@shopify/polaris';
 import { getErrorMessage } from '@utils/api-utils';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
+import { ImageSizesProvider } from 'src/context';
 import css from 'styled-jsx/css';
 
 const Home: NextPage = () => {
@@ -34,13 +35,15 @@ const Home: NextPage = () => {
   return (
     <Frame>
       <Page title="Spacestagram" subtitle="Mars Rover Photos">
-        <ul className="photo-list" aria-label="Photo from rovers">
-          {photos.map((photo) => (
-            <li key={photo.id}>
-              <PhotoCard photo={photo} />
-            </li>
-          ))}
-        </ul>
+        <ImageSizesProvider value="(min-width: 640px) 20vw, 100vw">
+          <ul className="photo-list" aria-label="Photo from rovers">
+            {photos.map((photo) => (
+              <li key={photo.id}>
+                <PhotoCard photo={photo} />
+              </li>
+            ))}
+          </ul>
+        </ImageSizesProvider>
 
         <style jsx>{styles}</style>
       </Page>

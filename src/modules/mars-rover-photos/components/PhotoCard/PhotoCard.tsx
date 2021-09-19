@@ -9,6 +9,7 @@ import { getErrorMessage } from '@utils/api-utils';
 import axios from 'axios';
 import Image from 'next/image';
 import React, { PropsWithChildren } from 'react';
+import { useImageSizes } from 'src/context';
 import css from 'styled-jsx/css';
 type PhotoCardProps = {
   photo: MarsRoverPhoto;
@@ -18,6 +19,7 @@ export const PhotoCard = ({
   ...props
 }: PropsWithChildren<PhotoCardProps>) => {
   const userAuth = useUserAuth();
+  const sizes = useImageSizes();
 
   const handlePrimaryActionClick = async () => {
     if (!userAuth?.user_id) return;
@@ -51,7 +53,7 @@ export const PhotoCard = ({
             layout="fill"
             src={props.photo.img_src}
             alt={`Rover ${props.photo.rover.name} - ${props.photo.camera.full_name}`}
-            sizes="(min-width: 640px) 20vw, 100vw"
+            sizes={sizes}
           />
         </div>
       </MediaCard>
