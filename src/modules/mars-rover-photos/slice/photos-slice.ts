@@ -149,7 +149,9 @@ export const photosSlice = createSlice({
       })
       .addMatcher(isRejected, (state, action) => {
         state.status = 'failed';
-        state.error = { message: getErrorMessage(action.error) };
+        state.error = {
+          message: getErrorMessage(action.payload ?? action.error),
+        };
       });
   },
 });

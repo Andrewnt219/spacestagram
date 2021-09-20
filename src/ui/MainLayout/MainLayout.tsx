@@ -3,6 +3,7 @@ import { Frame } from '@shopify/polaris';
 import { nanoid } from 'nanoid';
 import React, { PropsWithChildren, useEffect } from 'react';
 import { useAppDispatch } from 'src/app/store';
+import { ErrorToastProvider } from 'src/context';
 
 type MainLayoutProps = {};
 
@@ -20,7 +21,9 @@ export const MainLayout = ({
 
   return (
     <Frame>
-      <main>{children}</main>
+      <ErrorToastProvider>
+        <main>{children}</main>
+      </ErrorToastProvider>
     </Frame>
   );
 };
